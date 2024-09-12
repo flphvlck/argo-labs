@@ -12,6 +12,11 @@ Install lab env with:
 
 HTTP and GRPC endpoints are available on `argo-cd.lab.hvlck.xyz` and `argo-cd-grpc.lab.hvlck.xyz`. These domains are resolved to `127.0.0.1`, so you can use them for testing.
 
+Example application:
+```
+kubectl apply -f argo-cd/examples/application_example-app.yaml
+```
+
 ## Argo Workflows
 Install lab env with:
 ```
