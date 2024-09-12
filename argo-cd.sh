@@ -2,6 +2,14 @@
 
 DOMAIN="lab.hvlck.xyz"
 
+# necessary commands
+for COMMAND in kubectl openssl yq; do
+    if ! command -v "$COMMAND" >/dev/null; then
+        echo "$COMMAND not found." 1>&2
+        exit 1
+    fi
+done
+
 # custom domain replacement
 if [[ "$DOMAIN" != "lab.hvlck.xyz" ]]; then
     sed -i "s/lab.hvlck.xyz/${DOMAIN}/g" argo-cd/manifests/*.yaml
