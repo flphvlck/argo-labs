@@ -2,7 +2,15 @@
 Lab environments for testing various Argo projects.
 
 Prerequisites:
-  * Kind cluster from https://github.com/flphvlck/k8s-labs
+  * Up to date versions of kubectl, Kind, Minikube
+  * K8s lab cluster with ports 80 and 443 exposed locally (simulation of direct access to Ingress Controller ports)
+    * Kind cluster from https://github.com/flphvlck/k8s-labs
+    * or Minikube
+
+```
+minikube start --apiserver-port=6443 --addons=ingress --driver=docker --ports=80:80,443:443
+kubectl -n ingress-nginx patch deployment ingress-nginx-controller -p'{"spec":{"template":{"spec":{"hostNetwork": true}}}}'
+```
 
 ## Argo CD
 Install lab env with:

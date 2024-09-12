@@ -18,13 +18,16 @@ if ! kubectl -n argo-cd get secret argo-cd-ingress-tls &>/dev/null; then
 fi
 
 # workaround for https://github.com/argoproj/argo-cd/issues/17150 - creates custom kubeconfig for later use with argocd cluster add command
-kubectl config --kubeconfig=kubeconfig set-credentials workaround-admin --token="$(kubectl -n argo-cd get secret workaround-admin-token -o jsonpath="{.data.token}" | base64 -d)"
-SERVER=$(yq '.clusters[] | select(.name == "kind-lab1") | .cluster.server' ~/.kube/config)
-kubectl -n argo-cd get secret workaround-admin-token -o jsonpath="{.data.ca\.crt}" | base64 -d > cacert.pem
-kubectl --kubeconfig=kubeconfig config set-cluster kind-lab1 --server="$SERVER" --certificate-authority=cacert.pem --embed-certs
-kubectl --kubeconfig=kubeconfig config set-context kind-lab1 --user=workaround-admin --cluster=kind-lab1
-kubectl --kubeconfig=kubeconfig config use-context kind-lab1
-rm cacert.pem
+CURRENT_CONTEXT=$(kubectl config current-context)
+if [[ "$CURRENT_CONTEXT" == "kind-lab1" ]] || [[ "$CURRENT_CONTEXT" == "minikube" ]]; then
+    kubectl config --kubeconfig=kubeconfig set-credentials workaround-admin --token="$(kubectl -n argo-cd get secret workaround-admin-token -o jsonpath="{.data.token}" | base64 -d)"
+    SERVER=$(yq ".clusters[] | select(.name == \"${CURRENT_CONTEXT}\") | .cluster.server" ~/.kube/config)
+    kubectl -n argo-cd get secret workaround-admin-token -o jsonpath="{.data.ca\.crt}" | base64 -d > cacert.pem
+    kubectl --kubeconfig=kubeconfig config set-cluster "$CURRENT_CONTEXT" --server="$SERVER" --certificate-authority=cacert.pem --embed-certs
+    kubectl --kubeconfig=kubeconfig config set-context "$CURRENT_CONTEXT" --user=workaround-admin --cluster="$CURRENT_CONTEXT"
+    kubectl --kubeconfig=kubeconfig config use-context "$CURRENT_CONTEXT"
+    rm cacert.pem
+fi
 
 # get Argo CD admin password
 kubectl -n argo-cd rollout status deployment argocd-server -w
@@ -37,6 +40,6 @@ echo "## ARGO-CD ADMIN PASSWORD: ${ARGOCD_ADMIN_PASSWORD}"
 echo "## ARGO-CD WEB UI: https://argo-cd.${DOMAIN}"
 echo "## ARGO-CD CLI: argocd login argo-cd-grpc.${DOMAIN}"
 echo "##"
-echo "## ADD CLUSTER TO ARGO-CD: argocd cluster add kind-lab1 --kubeconfig=kubeconfig --in-cluster"
+echo "## ADD CLUSTER TO ARGO-CD: argocd cluster add ${CURRENT_CONTEXT} --kubeconfig=kubeconfig --in-cluster"
 echo "##"
 echo "############################"
