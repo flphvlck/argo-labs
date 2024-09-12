@@ -2,13 +2,6 @@
 
 DOMAIN="lab.hvlck.xyz"
 
-###
-## Argo CD Deployment
-###
-# clone fresh repo which contains manifests
-#rm -rf ./argo-cd/source
-#git clone --branch "$ARGO_CD_VERSION" --depth=1 https://github.com/argoproj/argo-cd.git argo-cd/source
-
 # custom domain replacement
 if [[ "$DOMAIN" != "lab.hvlck.xyz" ]]; then
     sed -i "s/lab.hvlck.xyz/${DOMAIN}/g" argo-cd/manifests/*.yaml

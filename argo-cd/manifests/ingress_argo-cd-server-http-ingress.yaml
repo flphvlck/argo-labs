@@ -20,5 +20,5 @@ spec:
     host: argo-cd.lab.hvlck.xyz
   tls:
   - hosts:
-    - argo-cd.lab.hvlck.xyz 
+    - argo-cd.lab.hvlck.xyz
     secretName: argo-cd-ingress-tls
