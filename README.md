@@ -20,7 +20,7 @@ kubectl apply -f argo-cd/examples/application_example-app.yaml
 ## Argo Workflows
 Install lab env with:
 ```
-argo-workflows.sh
+./argo-workflows.sh
 ```
 
 UI is accessible via `argo-workflows.lab.hvlck.xyz`. The domain is resolved to `127.0.0.1`.
