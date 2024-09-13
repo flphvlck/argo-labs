@@ -9,7 +9,7 @@ Prerequisites:
 
 ```
 minikube start --apiserver-port=6443 --addons=ingress --driver=docker --ports=80:80,443:443
-kubectl -n ingress-nginx patch deployment ingress-nginx-controller -p'{"spec":{"template":{"spec":{"hostNetwork": true}}}}'
+kubectl -n ingress-nginx patch deployment ingress-nginx-controller -p '{"spec":{"template":{"spec":{"hostNetwork": true}}}}'
 ```
 
 ## Argo CD
