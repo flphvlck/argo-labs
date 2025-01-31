@@ -27,9 +27,13 @@ fi
 
 # workaround for https://github.com/argoproj/argo-cd/issues/17150 - creates custom kubeconfig for later use with argocd cluster add command
 CURRENT_CONTEXT=$(kubectl config current-context)
-if [[ "$CURRENT_CONTEXT" == "kind-lab1" ]] || [[ "$CURRENT_CONTEXT" == "minikube" ]]; then
+if [[ "$CURRENT_CONTEXT" =~ ^(kind-lab1|rke2-lab|minikube)$ ]]; then
     kubectl config --kubeconfig=kubeconfig set-credentials workaround-admin --token="$(kubectl -n argo-cd get secret workaround-admin-token -o jsonpath="{.data.token}" | base64 -d)"
-    SERVER=$(yq -r ".clusters[] | select(.name == \"${CURRENT_CONTEXT}\") | .cluster.server" ~/.kube/config)
+   if [[ "$CURRENT_CONTEXT" == "rke2-lab" ]]; then
+        SERVER=$(yq -r ".clusters[] | select(.name == \"default\") | .cluster.server" "$KUBECONFIG")
+    else
+        SERVER=$(yq -r ".clusters[] | select(.name == \"${CURRENT_CONTEXT}\") | .cluster.server" ~/.kube/config)
+    fi
     kubectl -n argo-cd get secret workaround-admin-token -o jsonpath="{.data.ca\.crt}" | base64 -d > cacert.pem
     kubectl --kubeconfig=kubeconfig config set-cluster "$CURRENT_CONTEXT" --server="$SERVER" --certificate-authority=cacert.pem --embed-certs
     kubectl --kubeconfig=kubeconfig config set-context "$CURRENT_CONTEXT" --user=workaround-admin --cluster="$CURRENT_CONTEXT"
