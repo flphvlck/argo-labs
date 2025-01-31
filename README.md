@@ -4,7 +4,7 @@ Lab environments for testing various Argo projects.
 Prerequisites:
   * Up to date versions of: **kubectl**, **openssl**, **yq**, **kind** or **minikube**
   * K8s lab cluster with ports 80 and 443 exposed locally (simulation of direct access to Ingress Controller ports)
-    * Kind cluster from https://github.com/flphvlck/k8s-labs
+    * Kind or RKE2 cluster from https://github.com/flphvlck/k8s-labs
     * or Minikube
 
 ```
