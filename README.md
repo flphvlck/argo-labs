@@ -22,7 +22,7 @@ HTTP and GRPC endpoints are available on `argo-cd.lab.hvlck.xyz` and `argo-cd-gr
 
 Example application (App Of Apps):
 ```
-kubectl apply -f argo-cd/examples/application_apps.yaml
+kubectl apply -f argo-cd/examples/application_argocd-lab-apps.yaml
 ```
 
 ## Argo Workflows
