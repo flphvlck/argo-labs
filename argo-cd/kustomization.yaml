@@ -5,8 +5,8 @@ namespace: argo-cd
 
 resources:
 - ./manifests
-- https://github.com/argoproj/argo-cd/manifests/crds?ref=v2.13.4
-- https://github.com/argoproj/argo-cd/manifests/namespace-install?ref=v2.13.4
+- https://github.com/argoproj/argo-cd/manifests/crds?ref=v2.14.10
+- https://github.com/argoproj/argo-cd/manifests/namespace-install?ref=v2.14.10
 
 configMapGenerator:
   - name: argocd-cmd-params-cm
