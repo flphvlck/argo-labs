@@ -5,8 +5,8 @@ namespace: argo-cd
 
 resources:
 - ./manifests
-- https://github.com/argoproj/argo-cd/manifests/crds?ref=v2.14.10
-- https://github.com/argoproj/argo-cd/manifests/namespace-install?ref=v2.14.10
+- https://github.com/argoproj/argo-cd/manifests/crds?ref=v3.0.16
+- https://github.com/argoproj/argo-cd/manifests/namespace-install?ref=v3.0.16
 
 configMapGenerator:
   - name: argocd-cmd-params-cm
@@ -16,4 +16,4 @@ configMapGenerator:
   - name: argocd-cm
     behavior: merge
     literals:
-      - application.instanceLabelKey=argocd.argoproj.io/instance
+      - application.resourceTrackingMethod=annotation
